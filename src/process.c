@@ -8,8 +8,7 @@ void process_create(char* argv[])
   {
     //parent
     wait(NULL);
-    printf("s3ms > ");
-    fflush(stdout);
+
 
   }
   else if(pid == 0)
@@ -20,6 +19,9 @@ void process_create(char* argv[])
       perror("Err ");
       exit(EXIT_FAILURE);
     }
+
+    fflush(stdout);
+    
     exit(0);
   }
   else
