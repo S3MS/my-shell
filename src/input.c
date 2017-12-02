@@ -11,6 +11,7 @@ void get_input(char* commands)
     char c = fgetc(stdin);
     if(c == '\n')
       break;
+
     commands[count++] = c;
 
   }

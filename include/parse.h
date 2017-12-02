@@ -5,6 +5,11 @@
 #include "stdlib.h"
 
 #define MAX 500  //all header file must same.
+typedef enum
+{
+  false = 0,
+  true = 1
+}bool;
 
 void parse(char*, char* argv[]);
 
