@@ -6,6 +6,7 @@
 #include "unistd.h"
 #include "string.h"
 #include "errno.h"
+#include "fcntl.h"
 
-void process_create(char* argv[]);
+void process_create(char* argv[], int*, char* file[]);
 #endif

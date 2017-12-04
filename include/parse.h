@@ -11,6 +11,6 @@ typedef enum
   true = 1
 }bool;
 
-void parse(char*, char* argv[]);
+void parse(char*, char* argv[], int*, char* file[]);
 
 #endif

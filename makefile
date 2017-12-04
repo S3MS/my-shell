@@ -1,6 +1,6 @@
-hepsi: derle calistir
+all: compile run
 
-derle:
+compile:
 
 		gcc -I ./include/ -o ./lib/input.o -c ./src/input.c
 		gcc -I ./include/ -o ./lib/promt.o -c ./src/promt.c
@@ -8,5 +8,5 @@ derle:
 		gcc -I ./include/ -o ./lib/process.o -c ./src/process.c
 		gcc -I ./include/ -o ./bin/shell ./lib/input.o ./lib/process.o ./lib/parse.o ./lib/promt.o ./src/shell.c
 
-calistir:
+run:
 			./bin/shell

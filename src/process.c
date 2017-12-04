@@ -1,6 +1,6 @@
 #include "process.h"
 
-void process_create(char* argv[])
+void process_create(char* argv[], int* code, char* file[])
 {
   int is_cd = 0;
   if(strcmp(argv[0],"cd") == 0)
@@ -13,7 +13,7 @@ void process_create(char* argv[])
        result = chdir(argv[1]);
     else
        result = chdir(home);
-       
+
     if(result != 0)
     {
       switch(result)
@@ -47,6 +47,29 @@ void process_create(char* argv[])
     //child
     if(is_cd)
       exit(0);
+
+    int fd;
+
+    if(*code == 1)
+    {
+      if ((fd = open(file[0], O_WRONLY|O_CREAT|O_TRUNC,S_IRUSR|S_IWUSR)) < 0)  {
+       perror("Err ");
+       exit(EXIT_FAILURE);
+      }
+      dup2(fd, 1);
+    }
+    if(*code == 2)
+    {
+      if ((fd = open(file[0], O_RDONLY)) < 0)  {
+       perror("Err ");
+       exit(EXIT_FAILURE);
+      }
+      dup2(fd, 0);
+    }
+
+    if(*code != 0)
+      close(fd);
+
     if(execvp(argv[0],argv) < 0)
     {
       perror("Err ");

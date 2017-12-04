@@ -9,11 +9,14 @@ int main()
 {
   char commands[MAX];
   char* argv[MAX];
+  int code;
+  char* file[1];
+
   while(1)
   {
     promt_write();
     get_input(commands);
-    parse(commands, argv);
-    process_create(argv);
+    parse(commands, argv, &code, file);
+    process_create(argv, &code, file);
   }
 }
