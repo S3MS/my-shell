@@ -2,6 +2,9 @@
 
 void process_create(char* argv[], int* code, char* file[])
 {
+  if(argv[0] == NULL)
+    return;
+
   int is_cd = 0;
   if(strcmp(argv[0],"cd") == 0)
   {
