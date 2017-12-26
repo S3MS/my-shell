@@ -1,17 +1,21 @@
 #include "promt.h"
 
+
+
 void promt_write()
 {
+  int count = -1, index = 0, i, j;
+  char token[100][100];
+  char locate[100];
+  char* username = getenv("USER");
   char pwd[1024];
+
   if (getcwd(pwd, sizeof(pwd)) == NULL)
   {
       perror("Current pwd not found.");
       return;
   }
-   int count = -1, index = 0, i, j;
-   char token[100][100];
-   char locate[100];
-   char* username = getenv("USER");
+
 
   for(i = 0; i < 100; i++)
     for(j = 0; j < 100; j++)
@@ -54,17 +58,40 @@ void promt_write()
     locate[--index] = '\0';
   }
 
+  for(i = 0; username[i] != '\0'; i++);
+
+  G_LENGHT = 0;
+  G_LENGHT += i;
 
 
+    strcpy(G_USERNAME, username);
 
-  printf(GRN"%s "LGT,username);
+
+  printf(GRN"%s "BLU,username);
 
   if(count == 1)
+  {
     printf("%s ", locate);
+    strcpy(G_LOCATE, locate);
+
+    for(i = 0; locate[i] != '\0'; i++);
+    G_LENGHT += i;
+    if(i == 1)
+      G_LENGHT += 2;
+  }
+
   else
+  {
     printf("%s ", pwd);
+    strcpy(G_LOCATE, pwd);
+
+    for(i = 0; pwd[i] != '\0'; i++);
+    G_LENGHT += i + 2;
+  }
 
     printf(LGT" > "WHT);
+
+    G_LENGHT += 3;
 
   fflush(stdout);
 }

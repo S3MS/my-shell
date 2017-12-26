@@ -15,6 +15,9 @@
 #define LGT "\033[1;30m"
 #define BLU "\033[1;34m"
 
+int G_LENGHT;
+char G_LOCATE[256];
+char G_USERNAME[256];
 
 void promt_write();
 
