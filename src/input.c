@@ -70,6 +70,9 @@ void get_input(char* commands)
              else
               printf("%s", commands);
 
+              for(j = 0; j < count - cursor_pos; j++)
+                printf("\b");
+
              fflush(stdout);
              usleep(100000);
            }
@@ -96,6 +99,19 @@ void get_input(char* commands)
         if(cursor_pos > 0)
         {
           write(STDOUT_FILENO, backspace, 3);
+
+          for(i = cursor_pos - 1; i < count; i++)
+            commands[i] = commands[i + 1];
+
+          commands[count - 1] = ' ';
+
+          for(i = cursor_pos - 1; i < count; i++)
+              printf("%c", commands[i]);
+
+
+
+          for(i = cursor_pos - 1; i < count; i++)
+            printf("\b");
           cursor_pos--;
           count--;
         }
@@ -103,6 +119,7 @@ void get_input(char* commands)
       }
       else if(c == '\x1b')
       {
+        char* history;
         char arrow_keys[2];
         if(read(STDIN_FILENO, &arrow_keys[0], 1) != 1) continue;
         if(read(STDIN_FILENO, &arrow_keys[1], 1) != 1) continue;
@@ -110,14 +127,34 @@ void get_input(char* commands)
         if(arrow_keys[0] == '[')
           switch (arrow_keys[1]) {
             case 'A':
-              printf("[UP]");
-              fflush(stdout);
-              cursor_pos += 4;
+              if((history = get_forward_history()) != '\0')
+              {
+                char temp[500];
+                strcpy(temp, history);
+                int k;
+                for(k = 0; k < count; k++)
+                  write(STDOUT_FILENO, backspace, 3);
+                for(k = 0; temp[k] != '\0'; k++)
+                  commands[k] = temp[k];
+                cursor_pos = k;
+                count = k;
+                printf("%s", history);
+              }
               break;
             case 'B':
-              printf("[DOWN]");
-              fflush(stdout);
-              cursor_pos += 6;
+              if((history = get_back_history()) != '\0')
+              {
+                char temp[500];
+                strcpy(temp, history);
+                int k;
+                for(k = 0; k < count; k++)
+                  write(STDOUT_FILENO, backspace, 3);
+                for(k = 0; temp[k] != '\0'; k++)
+                  commands[k] = temp[k];
+                cursor_pos = k;
+                count = k;
+                printf("%s", history);
+              }
               break;
             case 'C':
               if(cursor_pos < count)
@@ -145,12 +182,35 @@ void get_input(char* commands)
         continue;
       }
         cursor_pos++;
-        commands[count++] = c;
-        printf("%c", c);
+        if(cursor_pos - 1 == count)
+        {
+            commands[count++] = c;
+            printf("%c", c);
+        }
+
+        else
+        {
+          for(i = count -1; i >= cursor_pos - 1; i--)
+          {
+            commands[i + 1] = commands[i];
+          }
+          commands[cursor_pos - 1] = c;
+          count++;
+
+          for(i = cursor_pos - 1; i < count; i++)
+            printf("%c", commands[i]);
+
+          for(i = cursor_pos; i < count; i++)
+            printf("\b");
+
+
+        }
+
 
     }//while end
       commands[count] = '\0';
-
+      add_history(commands);
+      empty_buffer();
       disable_raw_mode();
 }
 
@@ -163,6 +223,8 @@ void die(const char* s)
 void disable_raw_mode() {
   if (tcsetattr(STDIN_FILENO, TCSAFLUSH, &orig_termios) == -1)
     die("tcsetattr");
+
+    //for now good here!
 }
 void enable_raw_mode() {
   if (tcgetattr(STDIN_FILENO, &orig_termios) == -1) die("tcgetattr");

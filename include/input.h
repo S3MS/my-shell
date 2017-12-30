@@ -10,6 +10,8 @@
 #include "ncurses.h"
 #include <termios.h>
 #include "promt.h"
+#include "history.h"
+
 
 struct termios orig_termios;
 
