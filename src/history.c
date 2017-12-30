@@ -21,11 +21,14 @@ void init_history()
       if(read_line[count][index] == '\n')
       {
         read_line[count][index] = '\0';
-        count++;
+        if(count > 0 && strcmp(read_line[count], read_line[count - 1]) != 0)
+          count++;
+        if(count == 0)
+          count++;
         index = -1;
       }
     }
-
+      read_line[count][0] = '\0';
 
       LAST_INDEX = count - 1;
       CURRENT_INDEX = LAST_INDEX + 1;

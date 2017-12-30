@@ -209,8 +209,12 @@ void get_input(char* commands)
 
     }//while end
       commands[count] = '\0';
-      add_history(commands);
-      empty_buffer();
+      if(count != 0)
+      {
+        add_history(commands);
+        empty_buffer();
+      }
+
       disable_raw_mode();
 }
 
