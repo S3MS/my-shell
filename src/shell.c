@@ -13,6 +13,7 @@ int main()
   char* file[1];
 
   init_history();
+  
   while(1)
   {
     promt_write();

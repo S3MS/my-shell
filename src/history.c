@@ -61,6 +61,7 @@ char* get_back_history()
 
 void add_history(char* command)
 {
+  if(strcmp(read_line[LAST_INDEX], command) == 0) return;
   strcpy(read_line[BUFFER_INDEX++], command);
   LAST_INDEX++;
   CURRENT_INDEX = LAST_INDEX + 1;
